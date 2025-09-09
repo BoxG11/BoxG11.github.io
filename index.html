@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Idle Economy Game</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    💰 <span class="stat-value" id="money">0</span>
+                </div>
+                <div class="stat-item">
+                    📈 <span class="stat-value" id="lifetime">0</span>
+                </div>
+                <div class="stat-item">
+                    👷 <span class="stat-value" id="workers">0</span>/<span id="maxWorkers">0</span>
+                </div>
+                <div class="stat-item">
+                    ⚡ <span class="stat-value" id="mps">0</span>/s
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="inventory" title="Inventory">📦</button>
+            <button class="nav-tab" data-tab="producers" title="Producers">⛏️</button>
+            <button class="nav-tab" data-tab="refineries" title="Refineries">🏭</button>
+            <button class="nav-tab" data-tab="crafters" title="Crafters">🔨</button>
+            <button class="nav-tab" data-tab="market" title="Market">💱</button>
+            <button class="nav-tab" data-tab="unlocks" title="Unlocks">🔓</button>
+            <button class="nav-tab" data-tab="financials" title="Financials">💰</button>
+        </div>
+
+        <div class="tab-content active" id="inventory">
+            <h3 style="margin-bottom: 15px;">Resources</h3>
+            <div class="inventory-grid" id="inventoryGrid"></div>
+        </div>
+
+        <div class="tab-content" id="producers">
+            <h3 style="margin-bottom: 15px;">Resource Producers</h3>
+            <div id="producersList"></div>
+        </div>
+
+        <div class="tab-content" id="refineries">
+            <h3 style="margin-bottom: 15px;">Refineries</h3>
+            <div id="refineriesList"></div>
+        </div>
+
+        <div class="tab-content" id="crafters">
+            <h3 style="margin-bottom: 15px;">Crafters</h3>
+            <div id="craftersList"></div>
+        </div>
+
+        <div class="tab-content" id="market">
+            <h3 style="margin-bottom: 15px;">Market</h3>
+            <button class="btn btn-primary" onclick="testSell()" style="margin-bottom: 15px;">Test Debug Functions</button>
+            <button class="btn btn-success" onclick="alert('Button works!')" style="margin-bottom: 15px;">Test Button Click</button>
+            <div id="marketList"></div>
+        </div>
+
+        <div class="tab-content" id="unlocks">
+            <h3 style="margin-bottom: 15px;">Unlock Progress</h3>
+            <div class="unlock-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="unlock-text" id="unlockText"></div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h4 style="margin-bottom: 15px; color: #495057;">Building Unlock Requirements</h4>
+                
+                <div style="margin-bottom: 25px;">
+                    <h5 style="margin-bottom: 10px; color: #6c757d;">Producers</h5>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">🪚</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Lumber Mill</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $0</div>
+                                    <div id="status-lumbermill" style="font-size: 12px; margin-top: 4px;">✅ <span style="color: #28a745;">Unlocked</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px; display: none;" id="progress-lumbermill">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">⛏️</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Quarry</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $0</div>
+                                    <div id="status-quarry" style="font-size: 12px; margin-top: 4px;">✅ <span style="color: #28a745;">Unlocked</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px; display: none;" id="progress-quarry">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">⛰️</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Iron Mine</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $50,000</div>
+                                    <div id="status-mine" style="font-size: 12px; margin-top: 4px;">🔒 <span style="color: #6c757d;">Locked (0.0%)</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px;" id="progress-mine">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">⚫</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Coal Mine</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $100,000</div>
+                                    <div id="status-coalmine" style="font-size: 12px; margin-top: 4px;">🔒 <span style="color: #6c757d;">Locked (0.0%)</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px;" id="progress-coalmine">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <h5 style="margin-bottom: 10px; color: #6c757d;">Refineries</h5>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">🪚</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Sawmill</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $0</div>
+                                    <div id="status-sawmill" style="font-size: 12px; margin-top: 4px;">✅ <span style="color: #28a745;">Unlocked</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px; display: none;" id="progress-sawmill">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">🏭</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Brickworks</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $30,000</div>
+                                    <div id="status-brickworks" style="font-size: 12px; margin-top: 4px;">🔒 <span style="color: #6c757d;">Locked (0.0%)</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px;" id="progress-brickworks">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">🔥</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Smelter</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $150,000</div>
+                                    <div id="status-smelter" style="font-size: 12px; margin-top: 4px;">🔒 <span style="color: #6c757d;">Locked (0.0%)</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px;" id="progress-smelter">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">⚙️</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Steel Mill</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $500,000</div>
+                                    <div id="status-steelmill" style="font-size: 12px; margin-top: 4px;">🔒 <span style="color: #6c757d;">Locked (0.0%)</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px;" id="progress-steelmill">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <h5 style="margin-bottom: 10px; color: #6c757d;">Crafters</h5>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">🔨</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Tool Shop</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $3,000,000</div>
+                                    <div id="status-toolshop" style="font-size: 12px; margin-top: 4px;">🔒 <span style="color: #6c757d;">Locked (0.0%)</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px;" id="progress-toolshop">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">🏭</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Factory</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $10,000,000</div>
+                                    <div id="status-factory" style="font-size: 12px; margin-top: 4px;">🔒 <span style="color: #6c757d;">Locked (0.0%)</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px;" id="progress-factory">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 18px;">🔬</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold;">Tech Lab</div>
+                                    <div style="font-size: 12px; color: #666;">Unlocks at: $25,000,000</div>
+                                    <div id="status-techlab" style="font-size: 12px; margin-top: 4px;">🔒 <span style="color: #6c757d;">Locked (0.0%)</span></div>
+                                    <div style="width: 100%; height: 4px; background: #e9ecef; border-radius: 2px; margin-top: 4px;" id="progress-techlab">
+                                        <div style="height: 100%; background: #28a745; border-radius: 2px; width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; text-align: center; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <button class="btn btn-danger" onclick="resetGame()" style="font-size: 16px; padding: 12px 24px;">
+                    🔄 Reset Game
+                </button>
+            </div>
+        </div>
+
+        <div class="tab-content" id="financials">
+            <h3 style="margin-bottom: 15px;">Financial Transactions</h3>
+            <div class="financial-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Total Money:</span>
+                    <span class="summary-value" id="totalMoney">$0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Lifetime Earnings:</span>
+                    <span class="summary-value" id="lifetimeEarnings">$0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Money Per Second:</span>
+                    <span class="summary-value" id="moneyPerSecond">$0</span>
+                </div>
+            </div>
+            <div class="transaction-log" id="transactionLog">
+                <div class="log-header">
+                    <span>Time</span>
+                    <span>Type</span>
+                    <span>Description</span>
+                    <span>Amount</span>
+                    <span>Balance</span>
+                </div>
+                <div class="log-entries" id="logEntries"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript modules -->
+    <script src="js/data/gameData.js"></script>
+    <script src="js/core/gameState.js"></script>
+    <script src="js/core/gameLoop.js"></script>
+    <script src="js/ui/display.js"></script>
+    <script src="js/ui/tabs.js"></script>
+    <script src="js/gameplay/buildings.js"></script>
+    <script src="js/gameplay/market.js"></script>
+    <script src="js/gameplay/workers.js"></script>
+    <script src="js/utils/formatting.js"></script>
+    <script src="js/utils/save.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Google Auto Ads -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7386950320403304"
+            crossorigin="anonymous"></script>
+    
+</body>
+</html>
