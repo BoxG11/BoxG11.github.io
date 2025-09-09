@@ -1,17 +1,17 @@
 // Game Data Configuration
 const gameData = {
     resources: [
-        { id: "wood", name: "Wood", icon: "🪵", sellPrice: 5 },
-        { id: "stone", name: "Stone", icon: "🪨", sellPrice: 8 },
-        { id: "iron", name: "Iron Ore", icon: "⛏️", sellPrice: 15 },
-        { id: "coal", name: "Coal", icon: "⚫", sellPrice: 10 },
-        { id: "planks", name: "Planks", icon: "🪵", sellPrice: 15 },
-        { id: "bricks", name: "Bricks", icon: "🧱", sellPrice: 25 },
-        { id: "ironBar", name: "Iron Bar", icon: "🔧", sellPrice: 50 },
-        { id: "steel", name: "Steel", icon: "⚙️", sellPrice: 100 },
-        { id: "tools", name: "Tools", icon: "🔨", sellPrice: 200 },
-        { id: "machinery", name: "Machinery", icon: "⚡", sellPrice: 500 },
-        { id: "electronics", name: "Electronics", icon: "📱", sellPrice: 1000 }
+        { id: "wood", name: "Wood", icon: "🪵", sellPrice: 0.5 },
+        { id: "stone", name: "Stone", icon: "🪨", sellPrice: 0.8 },
+        { id: "iron", name: "Iron Ore", icon: "⛏️", sellPrice: 1.5 },
+        { id: "coal", name: "Coal", icon: "⚫", sellPrice: 1 },
+        { id: "planks", name: "Planks", icon: "🪵", sellPrice: 1.5 },
+        { id: "bricks", name: "Bricks", icon: "🧱", sellPrice: 2.5 },
+        { id: "ironBar", name: "Iron Bar", icon: "🔧", sellPrice: 5.0 },
+        { id: "steel", name: "Steel", icon: "⚙️", sellPrice: 10.0 },
+        { id: "tools", name: "Tools", icon: "🔨", sellPrice: 200. },
+        { id: "machinery", name: "Machinery", icon: "⚡", sellPrice: 50.0 },
+        { id: "electronics", name: "Electronics", icon: "📱", sellPrice: 100.0 }
     ],
     buildings: {
         producers: [
